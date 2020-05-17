@@ -14,6 +14,15 @@ func p(a ...interface{}) {
 	fmt.Println(a)
 }
 
+// init in package
+func init() {
+	config = Configuration{
+		Address: ":8080",
+		// @note: NG: "/public", OK: "public"
+		Static: "public",
+	}
+}
+
 // version
 func version() string {
 	return "0.1"
