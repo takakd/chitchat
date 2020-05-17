@@ -19,6 +19,8 @@ func main() {
 
 	// index
 	mux.HandleFunc("/", index)
+	// error
+	mux.HandleFunc("/err", err)
 
 	// starting up the server
 	server := &http.Server {
