@@ -7,6 +7,8 @@ import (
 	"errors"
 	"html/template"
 	"gowebprog/ch02/mychitchatexercise/data"
+	"log"
+	"os"
 )
 
 type Configuration struct {
@@ -15,6 +17,7 @@ type Configuration struct {
 }
 
 var config Configuration
+var logger *log.Logger
 
 // Convenience function for printing to stdout
 func p(a ...interface{}) {
@@ -28,6 +31,16 @@ func init() {
 		// @note: NG: "/public", OK: "public"
 		Static: "public",
 	}
+	file, err := os.OpenFile("chitchat.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalln("Failed to open log file", err)
+	}
+	logger = log.New(file, "INFO ", log.Ldate|log.Ltime|log.Lshortfile)
+}
+
+func warning(args ...interface{}) {
+	logger.SetPrefix("WARNING")
+	logger.Println(args...)
 }
 
 // version
@@ -50,6 +63,18 @@ func session(w http.ResponseWriter, r *http.Request) (sess data.Session, err err
 			err = errors.New("Invalid session")
 		}
 	}
+	return
+}
+
+// parse HTML templates
+// pass in a list of file names, and get a template
+func parseTemplateFiles(filenames ...string) (t *template.Template) {
+	var files []string
+	t = template.New("layout")
+	for _, file := range filenames {
+		files = append(files, fmt.Sprintf("templates/%s.html", file))
+	}
+	t = template.Must(t.ParseFiles(files...))
 	return
 }
 

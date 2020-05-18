@@ -22,6 +22,12 @@ func main() {
 	// error
 	mux.HandleFunc("/err", err)
 
+	// defined int route_auth.go
+	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/logout", logout)
+
+	// @todo: next
+
 	// starting up the server
 	server := &http.Server {
 		Addr: config.Address,
