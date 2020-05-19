@@ -1,8 +1,8 @@
 package main
 
 import (
-	"net/http"
 	"gowebprog/ch02/mychitchatexercise/data"
+	"net/http"
 )
 
 // GET /err?msg=

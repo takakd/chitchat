@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"strings"
 	"errors"
-	"html/template"
+	"fmt"
 	"gowebprog/ch02/mychitchatexercise/data"
+	"html/template"
 	"log"
+	"net/http"
 	"os"
+	"strings"
 )
 
 type Configuration struct {
@@ -72,7 +72,7 @@ func parseTemplateFiles(filenames ...string) (t *template.Template) {
 	var files []string
 	t = template.New("layout")
 	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("templates/%s.html", file))
+		files = append(files, fmt.Sprintf("templates/%s.gohtml", file))
 	}
 	t = template.Must(t.ParseFiles(files...))
 	return
@@ -81,10 +81,15 @@ func parseTemplateFiles(filenames ...string) (t *template.Template) {
 func generateHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("templates/%s.html", file))
+		files = append(files, fmt.Sprintf("templates/%s.gohtml", file))
 	}
 
 	templates := template.Must(template.ParseFiles(files...))
 	templates.ExecuteTemplate(w, "layout", data)
 
+}
+
+func danger(args ...interface{}) {
+	logger.SetPrefix("ERROR")
+	logger.Println(args...)
 }
